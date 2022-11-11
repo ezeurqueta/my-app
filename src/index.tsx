@@ -1,7 +1,8 @@
-import { ColorModeScript } from "@chakra-ui/react"
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
 import * as React from "react"
+import { AuthProvider } from "react-auth-kit"
 import * as ReactDOM from "react-dom/client"
-import { App } from "./App"
+import Login from "./components/login/Login"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
 
@@ -13,7 +14,14 @@ const root = ReactDOM.createRoot(container)
 root.render(
   <React.StrictMode>
     <ColorModeScript />
-    <App />
+    <ChakraProvider>
+    <AuthProvider authType = {'localstorage'}
+                  authName={'_auth'}
+                  cookieDomain={window.location.hostname}
+                  cookieSecure={window.location.protocol === "https:"}>
+    </AuthProvider>
+    <Login />
+    </ChakraProvider>
   </React.StrictMode>,
 )
 
