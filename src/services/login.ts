@@ -3,8 +3,7 @@ import clienteAxios from "./axios";
 
 export interface Token {
   token: string;
-  expiresIn: Date;
-  isAdmin: boolean;
+  expiresIn: number;
 }
 export type Credentials = {
     email: string;

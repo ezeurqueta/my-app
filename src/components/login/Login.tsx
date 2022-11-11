@@ -1,5 +1,4 @@
-import login from "../../services/login"
-import { useSignIn } from 'react-auth-kit'
+import { useSignIn } from "react-auth-kit";
 import { useState } from "react";
 import {
   Flex,
@@ -15,11 +14,12 @@ import {
   Avatar,
   FormControl,
   FormHelperText,
-  InputRightElement
+  InputRightElement,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import React from "react";
 import axios from "axios";
+import clienteAxios from "../../services/axios";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
@@ -27,34 +27,31 @@ const CFaLock = chakra(FaLock);
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleShowClick = () => setShowPassword(!showPassword);
+  const signIn = useSignIn();
+  const [formData, setFormData] = React.useState({ email: "", password: "" });
 
-
-  const SignInComponent = () => {
-    const signIn = useSignIn()
-    const [formData, setFormData] = React.useState({email: '', password: ''})
-
-    const onSubmit = (e:any) => {
-        e.preventDefault()
-        axios.post('/api/login', formData)
-            .then((res)=>{
-                if(res.status === 200){
-                    if(signIn(
-                        {
-                            token: res.data.token,
-                            expiresIn:res.data.expiresIn,
-                            tokenType: "Bearer",
-                        }
-                    )){ // Only if you are using refreshToken feature
-                      console.log("Entroooo");
-                        // Redirect or do-something
-                    }else {
-                        console.log("Error");
-                        
-                    }
-                }
-            })
-    }
-
+  const onSubmit = (e:any) => {
+      e.preventDefault()
+      clienteAxios.post("/cuentas/login", formData)
+          .then((res)=>{
+              if(res.status === 200){
+                  if(signIn(
+                      {
+                          token: res.data.token,
+                          expiresIn:res.data.expiresIn,
+                          tokenType: "Bearer",
+                          authState: res.data.authUserState,
+                          refreshToken: res.data.refreshToken,                    // Only if you are using refreshToken feature
+                          refreshTokenExpireIn: res.data.refreshTokenExpireIn     // Only if you are using refreshToken feature
+                      }
+                  )){ // Only if you are using refreshToken feature
+                      // Redirect or do-something
+                  }else {
+                      //Throw error
+                  }
+              }
+          })
+  }
 
   return (
     <Flex
@@ -87,7 +84,11 @@ const Login = () => {
                     pointerEvents="none"
                     children={<CFaUserAlt color="gray.300" />}
                   />
-                  <Input type="email" placeholder="email address"onChange={(e)=>setFormData({...formData, email: e.target.value})} />
+                  <Input
+                    type="email"
+                    placeholder="email address"
+                    onChange={(e)=>setFormData({...formData, email: e.target.value})}
+                  />
                 </InputGroup>
               </FormControl>
               <FormControl>
@@ -108,8 +109,7 @@ const Login = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                <FormHelperText textAlign="right">
-                </FormHelperText>
+                <FormHelperText textAlign="right"></FormHelperText>
               </FormControl>
               <Button
                 borderRadius={0}
@@ -128,6 +128,5 @@ const Login = () => {
     </Flex>
   );
 };
-}
-export default Login;
 
+export default Login;

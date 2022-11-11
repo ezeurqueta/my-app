@@ -2,6 +2,7 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
 import * as React from "react"
 import { AuthProvider } from "react-auth-kit"
 import * as ReactDOM from "react-dom/client"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Login from "./components/login/Login"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
@@ -19,8 +20,16 @@ root.render(
                   authName={'_auth'}
                   cookieDomain={window.location.hostname}
                   cookieSecure={window.location.protocol === "https:"}>
-    </AuthProvider>
-    <Login />
+      <BrowserRouter>
+      <Routes>
+      
+     <Route path="/" element={<Login />} />
+    
+    </Routes>
+      </BrowserRouter>
+      </AuthProvider>
+    
+    
     </ChakraProvider>
   </React.StrictMode>,
 )
@@ -31,7 +40,7 @@ root.render(
 serviceWorker.unregister()
 
 // If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+  // to log results (for example: reportWebVitals(console.log))
+  // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()
 
