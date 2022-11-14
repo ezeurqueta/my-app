@@ -15,43 +15,58 @@ import {
   FormControl,
   FormHelperText,
   InputRightElement,
+  Image,
+  Checkbox,
+  Text,
+  HStack,
+  Spacer,
+  Center,
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
-import React from "react";
-import axios from "axios";
-import clienteAxios from "../../services/axios";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import image from "../../images/fotoproyecto.png";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleShowClick = () => setShowPassword(!showPassword);
   const signIn = useSignIn();
-  const [formData, setFormData] = React.useState({ email: "", password: "" });
 
-  const onSubmit = (e:any) => {
-      e.preventDefault()
-      clienteAxios.post("/cuentas/login", formData)
-          .then((res)=>{
-              if(res.status === 200){
-                  if(signIn(
-                      {
-                          token: res.data.token,
-                          expiresIn:res.data.expiresIn,
-                          tokenType: "Bearer",
-                          authState: res.data.authUserState,
-                          refreshToken: res.data.refreshToken,                    // Only if you are using refreshToken feature
-                          refreshTokenExpireIn: res.data.refreshTokenExpireIn     // Only if you are using refreshToken feature
-                      }
-                  )){ // Only if you are using refreshToken feature
-                      // Redirect or do-something
-                  }else {
-                      //Throw error
-                  }
-              }
-          })
-  }
+  const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+  // min 8 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
+
+  const schema = Yup.object().shape({
+    email: Yup.string()
+      .required("Email is a required field")
+      .email("Invalid email format"),
+    password: Yup.string()
+      .required("Password is a required field")
+      .min(8, "Password must be at least 8 characters")
+      .matches(passwordRules, { message: "Please create a stronger password" }),
+  });
+
+  const onSubmit = async (values: any, actions: { resetForm: () => void }) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    actions.resetForm();
+  };
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: schema,
+    onSubmit,
+  });
 
   return (
     <Flex
@@ -63,67 +78,99 @@ const Login = () => {
       alignItems="center"
     >
       <Stack
-        flexDir="column"
-        mb="2"
-        justifyContent="center"
-        alignItems="center"
+        spacing={5}
+        direction="row"
+        backgroundColor="whiteAlpha.900"
+        border-radius="30%"
       >
-        <Avatar bg="teal.500" />
-        <Heading color="teal.400">Welcome</Heading>
-        <Box minW={{ base: "90%", md: "468px" }}>
-          <form>
-            <Stack
-              spacing={4}
-              p="1rem"
-              backgroundColor="whiteAlpha.900"
-              boxShadow="md"
-            >
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    children={<CFaUserAlt color="gray.300" />}
-                  />
-                  <Input
-                    type="email"
-                    placeholder="email address"
-                    onChange={(e)=>setFormData({...formData, email: e.target.value})}
-                  />
-                </InputGroup>
-              </FormControl>
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement
-                    pointerEvents="none"
-                    color="gray.300"
-                    children={<CFaLock color="gray.300" />}
-                  />
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    onChange={(e)=>setFormData({...formData, password: e.target.value})}
-                  />
-                  <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleShowClick}>
-                      {showPassword ? "Hide" : "Show"}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-                <FormHelperText textAlign="right"></FormHelperText>
-              </FormControl>
+        <Box boxSize="500px" alignItems="center" justifyContent="center">
+          <Heading>Welcome Back</Heading>
+          <Text fontSize="sm">Welcome back! Please enter your details.</Text>
+          {/* <Formik
+            validationSchema={schema}
+            initialValues={{ email: "", password: "" }}
+            onSubmit={(values) => {
+              // Alert the input values of the form that we filled
+              alert(JSON.stringify(values));
+            }}
+          > */}
+          <form onSubmit={handleSubmit}>
+            <FormControl>
+              <Text as="b" fontSize="sm">
+                Email
+              </Text>
+              <InputGroup>
+                <Input
+                  value={values.email}
+                  onChange={handleChange}
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  id="email"
+                />
+                  {errors.email && touched.email && (
+                    <Text>{errors.email}</Text>
+                  )}
+
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<CFaUserAlt color="gray.300" />}
+                />
+              </InputGroup>
+            </FormControl>
+            <FormControl>
+              <Text as="b" fontSize="sm">
+                Password
+              </Text>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  color="gray.300"
+                  children={<CFaLock color="gray.300" />}
+                />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                  {errors.password && touched.password && (
+                    <Text>{errors.password}</Text>
+                  )}
+              </InputGroup>
+              <HStack>
+                <Checkbox>Remember for 30 days</Checkbox>
+                <Spacer />
+                <Link>Forgot Password</Link>
+              </HStack>
+              <FormHelperText textAlign="right"></FormHelperText>
+            </FormControl>
+            <Center>
               <Button
-                borderRadius={0}
+                borderRadius="15%"
                 type="submit"
                 variant="solid"
-                colorScheme="teal"
-                width="full"
-                onClick={onSubmit}
+                colorScheme="purple"
+                textAlign="center"
+                width="50%"
+                disabled={isSubmitting}
               >
-                Login
+                Sign in
               </Button>
+            </Center>
+            <Stack>
+              <Center>
+                <Text fontSize="m">Dont have an account? </Text>
+                <Link color="purple"> Sign Up</Link>
+              </Center>
             </Stack>
           </form>
+          {/* </Formik> */}
         </Box>
+        <Image src={image} />
       </Stack>
     </Flex>
   );

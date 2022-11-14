@@ -1,6 +1,5 @@
 import clienteAxios from "./axios";
 
-
 export interface Token {
   token: string;
   expiresIn: number;
