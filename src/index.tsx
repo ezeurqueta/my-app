@@ -6,6 +6,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Login from "./components/login/Login";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import App from "./App";
+
 
 
 const container = document.getElementById("root");
@@ -24,8 +27,7 @@ root.render(
     >
       <ChakraProvider>
         <QueryClientProvider client={queryClient}>
-
-          <Login />
+          <App />
         </QueryClientProvider>
       </ChakraProvider>
     </AuthProvider>

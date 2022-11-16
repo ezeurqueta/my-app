@@ -1,5 +1,3 @@
-import { useSignIn } from "react-auth-kit";
-import { useState } from "react";
 import {
   Flex,
   Heading,
@@ -11,10 +9,8 @@ import {
   chakra,
   Box,
   Link,
-  Avatar,
   FormControl,
   FormHelperText,
-  InputRightElement,
   Image,
   Checkbox,
   Text,
@@ -26,13 +22,18 @@ import { FaUserAlt, FaLock } from "react-icons/fa";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import image from "../../images/fotoproyecto.png";
+import { useMutation } from "react-query";
+import clienteAxios from "../../services/axios";
+import { Token } from "../../types";
+import { useNavigate } from "react-router-dom";
+import { useSignIn } from "react-auth-kit";
+import moment from "moment";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Login = () => {
-  const signIn = useSignIn();
-
+ 
   const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
   // min 8 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
 
@@ -46,27 +47,40 @@ const Login = () => {
       .matches(passwordRules, { message: "Please create a stronger password" }),
   });
 
-  const onSubmit = async (values: any, actions: { resetForm: () => void }) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    actions.resetForm();
-  };
+  const localSignIn =useSignIn()
+  const navigate = useNavigate()
 
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
+  const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: schema,
-    onSubmit,
-  });
+    onSubmit:async () => {
+      await signInAsync();
+    },
+  })
+  
+  
+  const {mutateAsync: signInAsync, isLoading} = useMutation(
+    () => 
+    clienteAxios.post<Token>("/Cuentas/Login", formik.values),
+    {
+      onSuccess:(res) => {
+        localSignIn({
+          token:res.data.token,
+          authState:{isAdmin:res.data.isAdmin},
+          tokenType:"Bearer",
+          expiresIn:moment().diff(moment(res.data.expiresIn), "hours")
+        })
+        navigate("/")
+      },
+      onError:() => {
+        console.log("Error");
+        
+      }
+    }
+  )
 
   return (
     <Flex
@@ -94,22 +108,22 @@ const Login = () => {
               alert(JSON.stringify(values));
             }}
           > */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={formik.handleSubmit}>
             <FormControl>
               <Text as="b" fontSize="sm">
                 Email
               </Text>
               <InputGroup>
                 <Input
-                  value={values.email}
-                  onChange={handleChange}
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
                   type="email"
                   placeholder="Email"
                   name="email"
                   id="email"
                 />
-                  {errors.email && touched.email && (
-                    <Text>{errors.email}</Text>
+                  {formik.errors.email && formik.touched.email && (
+                    <Text>{formik.errors.email}</Text>
                   )}
 
                 <InputLeftElement
@@ -133,12 +147,12 @@ const Login = () => {
                   type="password"
                   placeholder="Password"
                   name="password"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                 />
-                  {errors.password && touched.password && (
-                    <Text>{errors.password}</Text>
+                  {formik.errors.password && formik.touched.password && (
+                    <Text>{formik.errors.password}</Text>
                   )}
               </InputGroup>
               <HStack>
@@ -156,7 +170,7 @@ const Login = () => {
                 colorScheme="purple"
                 textAlign="center"
                 width="50%"
-                disabled={isSubmitting}
+                disabled={formik.isSubmitting}
               >
                 Sign in
               </Button>
