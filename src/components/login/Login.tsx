@@ -33,7 +33,6 @@ const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Login = () => {
- 
   const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
   // min 8 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
 
@@ -47,8 +46,8 @@ const Login = () => {
       .matches(passwordRules, { message: "Please create a stronger password" }),
   });
 
-  const localSignIn =useSignIn()
-  const navigate = useNavigate()
+  const localSignIn = useSignIn();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -56,31 +55,28 @@ const Login = () => {
       password: "",
     },
     validationSchema: schema,
-    onSubmit:async () => {
+    onSubmit: async () => {
       await signInAsync();
     },
-  })
-  
-  
-  const {mutateAsync: signInAsync, isLoading} = useMutation(
-    () => 
-    clienteAxios.post<Token>("/Cuentas/Login", formik.values),
+  });
+
+  const { mutateAsync: signInAsync, isLoading } = useMutation(
+    () => clienteAxios.post<Token>("/Cuentas/Login", formik.values),
     {
-      onSuccess:(res) => {
+      onSuccess: (res) => {
         localSignIn({
-          token:res.data.token,
-          authState:{isAdmin:res.data.isAdmin},
-          tokenType:"Bearer",
-          expiresIn:moment().diff(moment(res.data.expiresIn), "hours")
-        })
-        navigate("/")
+          token: res.data.token,
+          authState: { isAdmin: res.data.isAdmin },
+          tokenType: "Bearer",
+          expiresIn: moment(res.data.expiracion).diff(moment(), "minutes"),
+        });
+        navigate("/Movies");
       },
-      onError:() => {
+      onError: () => {
         console.log("Error");
-        
-      }
+      },
     }
-  )
+  );
 
   return (
     <Flex
@@ -122,9 +118,9 @@ const Login = () => {
                   name="email"
                   id="email"
                 />
-                  {formik.errors.email && formik.touched.email && (
-                    <Text>{formik.errors.email}</Text>
-                  )}
+                {formik.errors.email && formik.touched.email && (
+                  <Text>{formik.errors.email}</Text>
+                )}
 
                 <InputLeftElement
                   pointerEvents="none"
@@ -151,9 +147,9 @@ const Login = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
-                  {formik.errors.password && formik.touched.password && (
-                    <Text>{formik.errors.password}</Text>
-                  )}
+                {formik.errors.password && formik.touched.password && (
+                  <Text>{formik.errors.password}</Text>
+                )}
               </InputGroup>
               <HStack>
                 <Checkbox>Remember for 30 days</Checkbox>

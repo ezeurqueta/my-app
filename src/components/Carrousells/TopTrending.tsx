@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
-// Here we have used react-icons package for the icons
 import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi";
-// And react-slick as our Carousel Lib
 import Slider from "react-slick";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { Movie } from "../../types";
+import clienteAxios from "../../services/axios";
 
 // Settings for the slider
 const settings = {
@@ -20,16 +20,9 @@ const settings = {
   slidesToScroll: 1,
 };
 
-const fetchMovieList = () => {
-  return fetch(`https://localhost:7164/api/peliculas`).then((response) =>
-    response.json()
-  );
-};
-
 export default function Carousel() {
-  const { isLoading, isError, data, error } = useQuery(
-    ["movies"],
-    fetchMovieList
+  const { data: movies } = useQuery(["movies"], () =>
+    clienteAxios.get<Movie[]>("/peliculas")
   );
 
   const navigate = useNavigate();
@@ -41,25 +34,6 @@ export default function Carousel() {
   // buttons as the screen size changes
   const top = useBreakpointValue({ base: "90%", md: "50%" });
   const side = useBreakpointValue({ base: "30%", md: "10px" });
-
-  //   const {mutateAsync: getMoviesAsync, isLoading} = useMutation(
-  //     () =>
-  //     clienteAxios.get<Movie>("/Peliculas"),
-  //     {
-  //       onSuccess:(res) => {
-  //         getMoviesAsync({
-  //           id:res.data.id,
-  //           titulo: res.data.titulo,
-  //           fechaEstreno: res.data.fechaEstreno,
-  //           poster: res.data.poster
-  //         })
-  //         navigate("/")
-  //       },
-  //       onError:() => {
-  //         console.log("Error");
-  //       }
-  //     }
-  //   )
 
   return (
     <Box
@@ -109,12 +83,13 @@ export default function Carousel() {
       </IconButton>
       {/* Slider */}
       <Slider {...settings} ref={(slider) => setSlider(slider)}>
-        {data.map((movies: { id: React.Key | null | undefined; titulo: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; poster: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }) => (
-          <>
-            <li key={movies.id}>{movies.titulo}</li>
-            <li>{movies.poster}</li>
-          </>
-        ))}
+        {movies &&
+          movies.data.map((movies) => (
+            <>
+              <li key={movies.id}>{movies.titulo}</li>
+              <li>{movies.poster}</li>
+            </>
+          ))}
       </Slider>
     </Box>
   );

@@ -1,18 +1,23 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./components/login/Login";
 import Movies from "./components/movies/Movies";
-
-// Views
-
+import { RequireAuth } from "react-auth-kit";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <>
       <Routes>
         <Route path="/Login" element={<Login />} />
-        <Route path="/" element={<Movies />} />
+        <Route
+          path="/Movies"
+          element={
+            <RequireAuth loginPath="/Login">
+              <Movies />
+            </RequireAuth>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 

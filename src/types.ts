@@ -1,6 +1,6 @@
 export interface Token {
     token: string;
-    expiresIn: string;
+    expiracion: string;
     isAdmin: boolean;
   }
   export interface Movie {

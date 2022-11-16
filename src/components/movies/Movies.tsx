@@ -5,8 +5,10 @@ const Movies = () => {
   return (
     <>
       <SideBar children={undefined} />
-      <div><TopTrending/></div>
-      
+      <div>
+        <TopTrending />
+      </div>
+
       <div></div>
     </>
   );
