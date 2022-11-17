@@ -24,6 +24,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: AiFillHome },
   { name: "Logout", icon: BiLogOut },
+  
 
 ];
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, HStack, Image } from "@chakra-ui/react";
+import { Box, Text, Image } from "@chakra-ui/react";
 import Slider from "react-slick";
 import { useQuery } from "react-query";
 import { Movie } from "../../types";
@@ -12,6 +12,20 @@ const settings = {
   speed: 500,
   autoplaySpeed: 10000,
   slidesToShow: 2,
+};
+const continueWatching = {
+  infinite: true,
+  autoplay: true,
+  speed: 500,
+  autoplaySpeed: 10000,
+  slidesToShow: 3,
+};
+const topRated = {
+  infinite: true,
+  autoplay: true,
+  speed: 500,
+  autoplaySpeed: 10000,
+  slidesToShow: 4,
 };
 
 export default function Carousel() {
@@ -39,18 +53,40 @@ export default function Carousel() {
         type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
       />
-
-
+      <Text as='b' fontSize='2xl' color={"White"}>Trending Movies</Text>
       <Slider  {...settings} ref={(slider) => setSlider(slider)}>
         {movies &&
           movies.data.map((movies) => (
-            <div key={movies.id} >              
-              <Image src={movies.poster} width="100%" height="36rem" />             
+            <Box key={movies.id} >              
+              <Image borderRadius={"10%"} src={movies.poster} width="80%" height="25rem" />             
              <ul>{movies.titulo}</ul>
-            </div>
+            </Box>
           ))}
       </Slider>
-
+      <Text as='b' fontSize='2xl' color={"White"}>Continue Watching</Text>
+      <Slider  {...continueWatching} ref={(slider) => setSlider(slider)}>
+        {movies &&
+          movies.data.map((movies) => (
+            <Box bg={movies.poster} key={movies.id} >
+              <Image borderRadius={"10%"} src={movies.poster} width="80%" height="25rem" />      
+              <Box>
+              <ul>{movies.titulo}</ul>
+              </Box>                   
+            </Box>
+          ))}
+      </Slider>
+      <Text as='b' fontSize='2xl' color={"White"}>Top Rated</Text>
+      <Slider  {...topRated} ref={(slider) => setSlider(slider)}>
+        {movies &&
+          movies.data.map((movies) => (
+            <Box bg={movies.poster} key={movies.id} >
+              <Image borderRadius={"10%"} src={movies.poster} width="80%" height="25rem" />      
+              <Box>
+              <ul>{movies.titulo}</ul>
+              </Box>                   
+            </Box>
+          ))}
+      </Slider>
     </Box>
   );
 }

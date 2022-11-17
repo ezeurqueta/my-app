@@ -9,6 +9,7 @@ const Movies = () => {
         <SideBar children={undefined} />
         <TopTrending />
       </HStack>
+      
     </>
   );
 };
