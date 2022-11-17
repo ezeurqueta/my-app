@@ -31,7 +31,7 @@ const LinkItems: Array<LinkItemProps> = [
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={("gray.100")}>
+    <Box minH="175vh" bg={("gray.100")}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
