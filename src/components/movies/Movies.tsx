@@ -1,17 +1,17 @@
+import { Box, Flex, HStack, Stack } from "@chakra-ui/react";
 import React from "react";
 import TopTrending from "../Carrousells/TopTrending";
 import SideBar from "../sideBar/Sidebar";
 const Movies = () => {
   return (
     <>
-      <SideBar children={undefined} />
-      <div>
+      <HStack bg={"black"}>
+        <SideBar children={undefined} />
         <TopTrending />
-      </div>
-
-      <div></div>
+      </HStack>
     </>
   );
 };
 
 export default Movies;
+

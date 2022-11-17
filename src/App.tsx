@@ -7,11 +7,11 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/Login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route
           path="/Movies"
           element={
-            <RequireAuth loginPath="/Login">
+            <RequireAuth loginPath="/">
               <Movies />
             </RequireAuth>
           }
