@@ -8,7 +8,6 @@ import {
   InputLeftElement,
   chakra,
   Box,
-  Link,
   FormControl,
   FormHelperText,
   Image,
@@ -60,7 +59,7 @@ const Login = () => {
     },
   });
 
-  const { mutateAsync: signInAsync, isLoading } = useMutation(
+  const { mutateAsync: signInAsync } = useMutation(
     () => clienteAxios.post<Token>("/Cuentas/Login", formik.values),
     {
       onSuccess: (res) => {
@@ -96,14 +95,6 @@ const Login = () => {
         <Box boxSize="500px" alignItems="center" justifyContent="center">
           <Heading>Welcome Back</Heading>
           <Text fontSize="sm">Welcome back! Please enter your details.</Text>
-          {/* <Formik
-            validationSchema={schema}
-            initialValues={{ email: "", password: "" }}
-            onSubmit={(values) => {
-              // Alert the input values of the form that we filled
-              alert(JSON.stringify(values));
-            }}
-          > */}
           <form onSubmit={formik.handleSubmit}>
             <FormControl>
               <Text as="b" fontSize="sm">
@@ -154,7 +145,7 @@ const Login = () => {
               <HStack>
                 <Checkbox>Remember for 30 days</Checkbox>
                 <Spacer />
-                <Link>Forgot Password</Link>
+                <Text>Forgot Password</Text>
               </HStack>
               <FormHelperText textAlign="right"></FormHelperText>
             </FormControl>
@@ -166,7 +157,7 @@ const Login = () => {
                 colorScheme="purple"
                 textAlign="center"
                 width="50%"
-                disabled={formik.isSubmitting}
+                isDisabled={formik.isSubmitting}
               >
                 Sign in
               </Button>
@@ -174,7 +165,7 @@ const Login = () => {
             <Stack>
               <Center>
                 <Text fontSize="m">Dont have an account? </Text>
-                <Link color="purple"> Sign Up</Link>
+                <Text color="purple"> Sign Up</Text>
               </Center>
             </Stack>
           </form>

@@ -5,19 +5,17 @@ import { RequireAuth } from "react-auth-kit";
 
 const App = () => {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route
-          path="/Movies"
-          element={
-            <RequireAuth loginPath="/">
-              <Movies />
-            </RequireAuth>
-          }
-        />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route
+        path="/Movies"
+        element={
+          <RequireAuth loginPath="/">
+            <Movies />
+          </RequireAuth>
+        }
+      />
+    </Routes>
   );
 };
 

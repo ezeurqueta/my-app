@@ -4,15 +4,12 @@ import {
   Flex,
   Icon,
   Link,
-  Drawer,
-  DrawerContent,
   Text,
   useDisclosure,
   BoxProps,
   FlexProps,
 } from "@chakra-ui/react";
 import { IconType } from "react-icons";
-import { ReactText } from "react";
 import { AiFillHome } from "react-icons/ai";
 import { useSignOut } from "react-auth-kit";
 import { useNavigate } from "react-router-dom";
@@ -24,19 +21,17 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Home", icon: AiFillHome },
   { name: "Logout", icon: BiLogOut },
-  
-
 ];
 
 export default function SimpleSidebar({ children }: { children: ReactNode }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onClose } = useDisclosure();
   return (
-    <Box minH="175vh" bg={("gray.100")}>
+    <Box minH="175vh" bg={"gray.100"}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
       />
-      
+
       {/* mobilenav */}
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
@@ -60,7 +55,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
   return (
     <Box
-      bg={("gray.700")}
+      bg={"gray.700"}
       borderRight="1px"
       borderRightColor={"gray.200"}
       w={{ base: "full", md: 60 }}
@@ -68,14 +63,14 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
+      <Box h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Movies App
         </Text>
-      </Flex>
+      </Box>
       {LinkItems.map((link) => (
         <NavItem onClick={handleLogout} key={link.name} icon={link.icon}>
-          {link.name}          
+          {link.name}
         </NavItem>
       ))}
     </Box>
@@ -84,7 +79,6 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
-  children: ReactText;
 }
 const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
   return (
@@ -93,7 +87,7 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
       style={{ textDecoration: "none" }}
       _focus={{ boxShadow: "none" }}
     >
-      <Flex
+      <Box
         align="center"
         p="4"
         mx="4"
@@ -116,7 +110,7 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
           />
         )}
         {children}
-      </Flex>
+      </Box>
     </Link>
   );
 };

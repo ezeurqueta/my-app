@@ -9,3 +9,8 @@ export interface Token {
     fechaEstreno: string
     poster: string
   }
+ 
+  export type Credentials = {
+    email: string;
+    password: string;
+  }; 
