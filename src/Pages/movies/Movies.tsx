@@ -47,7 +47,7 @@ export default function Carousel() {
         type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
       />
-      <Text as="b" fontSize="2xl" color={"White"}>
+      <Text fontWeight={"bold"} fontSize="2xl" color={"White"}>
         Trending Movies
       </Text>
       <Slider {...settings} ref={(slider) => setSlider(slider)}>
@@ -64,7 +64,7 @@ export default function Carousel() {
             </Box>
           ))}
       </Slider>
-      <Text as="b" fontSize="2xl" color={"White"}>
+      <Text fontWeight={"bold"} fontSize="2xl" color={"White"}>
         Continue Watching
       </Text>
       <Slider {...continueWatching} ref={(slider) => setSlider(slider)}>
@@ -83,7 +83,7 @@ export default function Carousel() {
             </Box>
           ))}
       </Slider>
-      <Text as="b" fontSize="2xl" color={"White"}>
+      <Text fontWeight={"bold"} fontSize="2xl" color={"White"}>
         Top Rated
       </Text>
       <Slider {...topRated} ref={(slider) => setSlider(slider)}>

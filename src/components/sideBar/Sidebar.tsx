@@ -23,7 +23,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Logout", icon: BiLogOut },
 ];
 
-export default function SimpleSidebar({ children }: { children: ReactNode }) {
+export default function SimpleSidebar() {
   const { onClose } = useDisclosure();
   return (
     <Box minH="175vh" bg={"gray.100"}>
@@ -34,7 +34,6 @@ export default function SimpleSidebar({ children }: { children: ReactNode }) {
 
       {/* mobilenav */}
       <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
       </Box>
     </Box>
   );
@@ -80,7 +79,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
   icon: IconType;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, ...rest }: NavItemProps) => {
   return (
     <Link
       href="#"
@@ -109,7 +108,6 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
             as={icon}
           />
         )}
-        {children}
       </Box>
     </Link>
   );

@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./components/login/Login";
-import Movies from "./components/movies/Movies";
+import Login from "./Pages/login/Login";
+import Movies from "./Pages/movies/Movies";
 import { RequireAuth } from "react-auth-kit";
 
 const App = () => {
